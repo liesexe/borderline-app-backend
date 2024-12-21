@@ -1,19 +1,20 @@
 const express = require('express');
-const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
-
-dotenv.config();
-connectDB();
+const setHostRoutes = require('./routes/hostRoutes');
 
 const app = express();
-
-app.use(express.json());
-
-// Rutas
-const customerRoutes = require('./routes/customerRoutes');
-app.use('/api/customer', customerRoutes);
-
 const PORT = process.env.PORT || 5000;
+
+// Connect to the database
+connectDB();
+
+// Middleware
+app.use(bodyParser.json());
+
+// Set up routes
+setHostRoutes(app);
+
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
