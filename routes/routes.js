@@ -1,5 +1,6 @@
 const express = require('express');
 const hostController = require('../controllers/hostController');
+const customerController = require('../controllers/customerController');
 
 const setHostRoutes = (app) => {
   const router = express.Router();
@@ -9,6 +10,8 @@ const setHostRoutes = (app) => {
   router.get('/hosts/:id', hostController.getHostById);
   router.put('/hosts/:id', hostController.updateHost);
   router.delete('/hosts/:id', hostController.deleteHost);
+  router.get('/customers', customerController.getCustomers);
+  router.post('/customers', customerController.saveCustomer);
 
   app.use('/api', router);
 };

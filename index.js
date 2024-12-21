@@ -2,19 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const setHostRoutes = require('./routes/hostRoutes');
+const setHostRoutes = require('./routes/routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Connect to the database
 connectDB();
 
-// Middleware
-app.use(cors()); // Add this line to enable CORS
+app.use(cors());
 app.use(bodyParser.json());
 
-// Set up routes
 setHostRoutes(app);
 
 app.listen(PORT, () => {
