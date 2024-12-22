@@ -26,10 +26,6 @@ const customerSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  host:{
-    type: String,
-    required: true,
-  },
   consent: {
     type: Boolean,
     required: true,
