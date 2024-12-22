@@ -2,6 +2,7 @@ const Customer = require('../models/customer');
 const Event = require('../models/event');
 const Attendance = require('../models/attendance');
 const Host = require('../models/host');
+const QRCode = require('qrcode');
 
 const getCustomers = async (req, res) => {
   try {
@@ -34,14 +35,14 @@ const saveCustomer = async (req, res) => {
           mensaje: 'El cliente ya está registrado para este evento' 
         });
       }
-    }
-
-    const formattedDate = convertDateToIso(birthDate);
+    }else{
+      const formattedDate = convertDateToIso(birthDate);
       customer = new Customer({ 
         name, lastname, documentNumber, email, 
         phone, birthDate: formattedDate, consent 
       });
-    await customer.save();
+      await customer.save();
+    }
 
     const host = await Host.findById(req.body.host);
     if (!host) {
@@ -55,9 +56,13 @@ const saveCustomer = async (req, res) => {
     });
     await attendance.save();
 
+    const idString = `${attendance._id}-${activeEvent._id}-${customer._id}`;
+    const base64Id = Buffer.from(idString).toString('base64');
+
+    const qrCode = await QRCode.toDataURL(base64Id);
+
     res.status(201).json({ 
-      customer, 
-      attendance,
+      code: qrCode,
       mensaje: 'Cliente registrado y asistencia creada' 
     });
   } catch (error) {
