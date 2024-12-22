@@ -16,21 +16,32 @@ const saveCustomer = async (req, res) => {
   const { name, lastname, documentNumber, email, phone, birthDate, consent, host } = req.body;
   try {
 
-    let customer = await Customer.findOne({ documentNumber });
-
-    if (!customer) {
-      const formattedDate = convertDateToIso(birthDate);
-      customer = new Customer({ 
-        name, lastname, documentNumber, email, 
-        phone, birthDate: formattedDate, consent 
-      });
-      await customer.save();
-    }
-
     const activeEvent = await Event.findOne({ status: 'active' });
     if (!activeEvent) {
       return res.status(404).json({ mensaje: 'No hay evento activo' });
     }
+
+    let customer = await Customer.findOne({ documentNumber });
+
+    if (customer) {
+      const existingAttendance = await Attendance.findOne({
+        customer: customer._id,
+        event: activeEvent._id
+      });
+
+      if (existingAttendance) {
+        return res.status(400).json({ 
+          mensaje: 'El cliente ya está registrado para este evento' 
+        });
+      }
+    }
+
+    const formattedDate = convertDateToIso(birthDate);
+      customer = new Customer({ 
+        name, lastname, documentNumber, email, 
+        phone, birthDate: formattedDate, consent 
+      });
+    await customer.save();
 
     const host = await Host.findById(req.body.host);
     if (!host) {
