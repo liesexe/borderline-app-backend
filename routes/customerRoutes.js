@@ -6,6 +6,7 @@ const setCustomerRoutes = (app) => {
 
   router.get('/customers', customerController.getCustomers);
   router.post('/customers', customerController.saveCustomer);
+  router.get('/customers/:id', customerController.getCustomerByDocumentNumber);
 
   app.use('/api', router);
 };

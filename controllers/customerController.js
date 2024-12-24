@@ -71,6 +71,21 @@ const saveCustomer = async (req, res) => {
   }
 };
 
+const getCustomerByDocumentNumber = async (req, res) => {
+  try {
+    const customer = await Customer.findOne({ documentNumber: req.params.id });
+    
+    if (!customer) {
+      return res.status(404).json({ mensaje: 'Cliente no encontrado' });
+    }
+
+    res.status(200).json(customer);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ mensaje: 'Error al buscar cliente' });
+  }
+};
+
 function convertDateToIso(dateStr) {
   const [date, month, year] = dateStr.split('/').map(Number);
   return new Date(year, month - 1, date);
@@ -79,4 +94,5 @@ function convertDateToIso(dateStr) {
 module.exports = {
   getCustomers,
   saveCustomer,
+  getCustomerByDocumentNumber
 };
