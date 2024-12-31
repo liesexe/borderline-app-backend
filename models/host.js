@@ -17,6 +17,11 @@ const hostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  alias: {
+    type: String,
+    required: true,
+    unique: true
+  },
   creationDate: {
     type: Date,
     default: Date.now,
