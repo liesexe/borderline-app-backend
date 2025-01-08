@@ -71,9 +71,9 @@ const saveCustomer = async (req, res) => {
   }
 };
 
-const getCustomerByDocumentNumber = async (req, res) => {
+const getCustomerByDocumentTypeAndDocumentNumber = async (req, res) => {
   try {
-    const customer = await Customer.findOne({ documentNumber: req.params.id });
+    const customer = await Customer.findOne({ documentType: req.params.type, documentNumber: req.params.id });
     
     if (!customer) {
       return res.status(404).json({ mensaje: 'Cliente no encontrado' });
@@ -94,5 +94,5 @@ function convertDateToIso(dateStr) {
 module.exports = {
   getCustomers,
   saveCustomer,
-  getCustomerByDocumentNumber
+  getCustomerByDocumentTypeAndDocumentNumber
 };
