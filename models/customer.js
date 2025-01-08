@@ -9,6 +9,10 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  documentType: {
+    type: String,
+    required: true,
+  },
   documentNumber: {
     type: String,
     required: true,

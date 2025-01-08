@@ -14,7 +14,7 @@ const getCustomers = async (req, res) => {
 };
 
 const saveCustomer = async (req, res) => {
-  const { name, lastname, documentNumber, email, phone, birthDate, consent, host } = req.body;
+  const { name, lastname, documentType, documentNumber, email, phone, birthDate, consent } = req.body;
   try {
 
     const activeEvent = await Event.findOne({ status: 'active' });
@@ -38,7 +38,7 @@ const saveCustomer = async (req, res) => {
     }else{
       const formattedDate = convertDateToIso(birthDate);
       customer = new Customer({ 
-        name, lastname, documentNumber, email, 
+        name, lastname, documentType, documentNumber, email, 
         phone, birthDate: formattedDate, consent 
       });
       await customer.save();
